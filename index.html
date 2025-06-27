@@ -1,12 +1,72 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="weer.css">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>UV & Weer App</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; max-width: 600px; margin: auto; }
+    input, select, button { padding: 0.5rem; margin-top: 1rem; width: 100%; }
+    #advies { margin-top: 2rem; }
+  </style>
 </head>
 <body>
-    
+  <h1>🌤 UV & Weer App</h1>
+  <input type="text" id="plaats" placeholder="Voer plaats in (bijv. Amsterdam)">
+  <select id="huidtype">
+    <option value="1">Huidtype 1 - Zeer licht</option>
+    <option value="2">Huidtype 2 - Licht</option>
+    <option value="3">Huidtype 3 - Licht getint</option>
+    <option value="4">Huidtype 4 - Getint</option>
+    <option value="5">Huidtype 5 - Donker</option>
+    <option value="6">Huidtype 6 - Zeer donker</option>
+  </select>
+  <button onclick="haalUVData()">Zoek UV-index</button>
+
+  <div id="resultaat"></div>
+  <div id="advies"></div>
+
+  <script>
+    async function haalUVData() {
+      const plaats = document.getElementById('plaats').value;
+      const huidtype = parseInt(document.getElementById('huidtype').value);
+
+      const locatieResp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${plaats}`);
+      const locatieData = await locatieResp.json();
+      if (!locatieData[0]) {
+        document.getElementById('resultaat').innerText = "Locatie niet gevonden.";
+        return;
+      }
+
+      const lat = locatieData[0].lat;
+      const lng = locatieData[0].lon;
+
+      const uvResp = await fetch(`https://api.openuv.io/api/v1/uv?lat=${lat}&lng=${lng}`, {
+        headers: {
+          "x-access-token": "openuv-1rmfhrmcegy3ps-io"
+        }
+      });
+      const uvData = await uvResp.json();
+
+      const uvIndex = uvData.result.uv;
+      document.getElementById('resultaat').innerHTML = `<h3>UV-index in ${plaats}: ${uvIndex.toFixed(1)}</h3>`;
+
+      let advies = "";
+
+      if (uvIndex <= 2) {
+        advies = "Geen bescherming nodig.";
+      } else if (uvIndex <= 5) {
+        advies = "Smeer je in, vooral bij lichte huid.";
+        if (huidtype <= 2) advies += " Jij hebt een gevoelige huid, dus wees extra voorzichtig.";
+      } else if (uvIndex <= 7) {
+        advies = "Smeer om de 2 uur, draag zonnebril en hoed.";
+      } else if (uvIndex <= 10) {
+        advies = "Zoek schaduw, smeer om het uur, draag beschermende kleding.";
+      } else {
+        advies = "Blijf zoveel mogelijk uit de zon!";
+      }
+
+      document.getElementById('advies').innerHTML = `<strong>Advies:</strong> ${advies}`;
+    }
+  </script>
 </body>
 </html>
