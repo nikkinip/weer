@@ -3,78 +3,14 @@
 <head>
     <link rel="stylesheet" href="weer.css">
   <meta charset="UTF-8">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 2rem;
-      max-width: 600px;
-      margin: auto;
-      background: #f0f8ff;
-    }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    input, select, button {
-      padding: 0.75rem;
-      margin-top: 1rem;
-      width: 100%;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
-
-    button {
-      background-color: #007BFF;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    .box {
-      margin-top: 2rem;
-      background: #ffffff;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    #weerinfo {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    #weericoon {
-      flex-shrink: 0;
-    }
-
-    #weericoon img {
-      width: 60px;
-      height: 60px;
-    }
-
-    #weertekst {
-      flex: 1;
-    }
-
-    strong {
-      color: #007BFF;
-    }
-
-    h3 {
-      margin-top: 0;
-    }
-  </style>
 </head>
 <body>
+     <div id="vanta-bg"></div>
+   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
+
   <h1 id="titel">🌤 UV & Weer App</h1>
   <input type="text" id="plaats" placeholder="Voer plaats in (bijv. Amsterdam)">
   
@@ -112,7 +48,7 @@
       // OpenUV API
       const uvResp = await fetch(`https://api.openuv.io/api/v1/uv?lat=${lat}&lng=${lng}`, {
         headers: {
-          "x-access-token": "openuv-1rmfhrmcegy3ps-io"
+          "x-access-token": "openuv-1rmfhrmceiowqi-io"
         }
       });
       const uvData = await uvResp.json();
@@ -158,5 +94,26 @@
     }
   </script>
   
+ 
+  <script>
+VANTA.CLOUDS({
+  el: "#vanta-bg",
+  mouseControls: true,
+  touchControls: true,
+  gyroControls: false,
+  minHeight: 200.00,
+  minWidth: 200.00,
+  backgroundColor: 0xffffff,
+  skyColor: 0x68b8d7,
+  cloudColor: 0xadc1de,
+  cloudShadowColor: 0x183550,
+  sunColor: 0xff9919,
+  sunGlareColor: 0xff6633,
+  sunlightColor: 0xff9933,
+  speed: 1.00
+})
+</script>
+
+
 </body>
 </html>
