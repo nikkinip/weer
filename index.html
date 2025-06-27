@@ -4,9 +4,50 @@
   <meta charset="UTF-8">
   <title>UV & Weer App</title>
   <style>
-    body { font-family: sans-serif; padding: 2rem; max-width: 600px; margin: auto; }
-    input, select, button { padding: 0.5rem; margin-top: 1rem; width: 100%; }
-    #advies { margin-top: 2rem; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+      background: #f0f8ff;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    input, select, button {
+      padding: 0.75rem;
+      margin-top: 1rem;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #resultaat, #advies {
+      margin-top: 2rem;
+      background: #ffffff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    #resultaat img {
+      vertical-align: middle;
+    }
   </style>
 </head>
 <body>
@@ -20,7 +61,7 @@
     <option value="5">Huidtype 5 - Donker</option>
     <option value="6">Huidtype 6 - Zeer donker</option>
   </select>
-  <button onclick="haalUVData()">Zoek UV-index</button>
+  <button onclick="haalUVData()">Zoek UV & Weer</button>
 
   <div id="resultaat"></div>
   <div id="advies"></div>
@@ -40,18 +81,31 @@
       const lat = locatieData[0].lat;
       const lng = locatieData[0].lon;
 
+      // OpenUV API
       const uvResp = await fetch(`https://api.openuv.io/api/v1/uv?lat=${lat}&lng=${lng}`, {
         headers: {
           "x-access-token": "openuv-1rmfhrmcegy3ps-io"
         }
       });
       const uvData = await uvResp.json();
-
       const uvIndex = uvData.result.uv;
-      document.getElementById('resultaat').innerHTML = `<h3>UV-index in ${plaats}: ${uvIndex.toFixed(1)}</h3>`;
+
+      // OpenWeatherMap API
+      const weerResp = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&units=metric&lang=nl&appid=bd5e378503939ddaee76f12ad7a97608`);
+      const weerData = await weerResp.json();
+
+      const temperatuur = weerData.main.temp;
+      const weerBeschrijving = weerData.weather[0].description;
+      const icon = weerData.weather[0].icon;
+
+      document.getElementById('resultaat').innerHTML = `
+        <h3>📍 Locatie: ${plaats}</h3>
+        <p>🌡️ <strong>Temperatuur:</strong> ${temperatuur}°C</p>
+        <p>🌥️ <strong>Weer:</strong> ${weerBeschrijving} <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="weericoon"></p>
+        <p>🔆 <strong>UV-index:</strong> ${uvIndex.toFixed(1)}</p>
+      `;
 
       let advies = "";
-
       if (uvIndex <= 2) {
         advies = "Geen bescherming nodig.";
       } else if (uvIndex <= 5) {
