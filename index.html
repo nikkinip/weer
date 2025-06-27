@@ -3,76 +3,7 @@
 <head>
     <link rel="stylesheet" href="weer.css">
   <meta charset="UTF-8">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 2rem;
-      max-width: 600px;
-      margin: auto;
-      background: #f0f8ff;
-    }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    input, select, button {
-      padding: 0.75rem;
-      margin-top: 1rem;
-      width: 100%;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-      box-sizing: border-box;
-    }
-
-    button {
-      background-color: #007BFF;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    .box {
-      margin-top: 2rem;
-      background: #ffffff;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    #weerinfo {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    #weericoon {
-      flex-shrink: 0;
-    }
-
-    #weericoon img {
-      width: 60px;
-      height: 60px;
-    }
-
-    #weertekst {
-      flex: 1;
-    }
-
-    strong {
-      color: #007BFF;
-    }
-
-    h3 {
-      margin-top: 0;
-    }
-  </style>
 </head>
 <body>
   <h1 id="titel">🌤 UV & Weer App</h1>
@@ -110,7 +41,7 @@
       // OpenUV API
       const uvResp = await fetch(`https://api.openuv.io/api/v1/uv?lat=${lat}&lng=${lng}`, {
         headers: {
-          "x-access-token": "openuv-1rmfhrmcegy3ps-io"
+          "x-access-token": "openuv-1rmfhrmceiowqi-io"
         }
       });
       const uvData = await uvResp.json();
