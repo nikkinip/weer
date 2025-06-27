@@ -42,7 +42,7 @@ input::placeholder {
 }
 
 select option {
-  color: #000;
+  color: #ffffff;
 }
 
 button {
@@ -104,7 +104,6 @@ h3 {
 #skincolour6 {
   background-color: #614111;
 }
-<<<<<<< HEAD
 #skincolour6{
     background-color: #614111;
 }
@@ -171,5 +170,3 @@ h3 {
     50% { background-position: 400% 0; }
     100% { background-position: 0 0; }
 }
-=======
->>>>>>> 0a44683afac454fac5884e24353c31280ad1dd72
