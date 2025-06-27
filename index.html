@@ -25,8 +25,11 @@
     <option value="5">Huidtype 5 - Donker</option>
     <option value="6">Huidtype 6 - Zeer donker</option>
   </select>
-  <button onclick="haalUVData()">Zoek UV & Weer</button>
 
+  <button class="glow-on-hover" onclick="haalUVData()">Zoek UV & Weer</button>
+  
+
+  <k!-k//skpan(dakkkta-title/lll="One")kkOnkke// -->
   <div id="resultaat" class="box"></div>
   <div id="advies" class="box"></div>
 
@@ -104,7 +107,6 @@
       document.getElementById('advies').innerHTML = `<strong>Advies:</strong> ${advies}`;
     }
   </script>
-
   <script>
     VANTA.CLOUDS({
       el: "#vanta-bg",
