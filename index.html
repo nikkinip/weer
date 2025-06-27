@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
+    <link rel="stylesheet" href="weer.css">
+
   <meta charset="UTF-8">
-  <title>UV & Weer App</title>
   <style>
     body { font-family: sans-serif; padding: 2rem; max-width: 600px; margin: auto; }
     input, select, button { padding: 0.5rem; margin-top: 1rem; width: 100%; }
@@ -10,17 +11,17 @@
   </style>
 </head>
 <body>
-  <h1>🌤 UV & Weer App</h1>
+  <h1 id="titel">🌤 UV & Weer App</h1>
   <input type="text" id="plaats" placeholder="Voer plaats in (bijv. Amsterdam)">
   <select id="huidtype">
-    <option value="1">Huidtype 1 - Zeer licht</option>
-    <option value="2">Huidtype 2 - Licht</option>
-    <option value="3">Huidtype 3 - Licht getint</option>
-    <option value="4">Huidtype 4 - Getint</option>
-    <option value="5">Huidtype 5 - Donker</option>
-    <option value="6">Huidtype 6 - Zeer donker</option>
+    <option id="skincolour1" value="1">Huidtype 1 - Zeer licht</option>
+    <option id="skincolour2"value="2">Huidtype 2 - Licht</option>
+    <option id="skincolour3"value="3">Huidtype 3 - Licht getint</option>
+    <option id="skincolour4"value="4">Huidtype 4 - Getint</option>
+    <option id="skincolour5"value="5">Huidtype 5 - Donker</option>
+    <option id="skincolour6"value="6">Huidtype 6 - Zeer donker</option>
   </select>
-  <button onclick="haalUVData()">Zoek UV-index</button>
+  <button id="button" onclick="haalUVData()">Zoek UV-index</button>
 
   <div id="resultaat"></div>
   <div id="advies"></div>
