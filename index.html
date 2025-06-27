@@ -1,28 +1,53 @@
 <!DOCTYPE html>
 <html lang="nl">
-<head>
-    <link rel="stylesheet" href="weer.css">
-  <meta charset="UTF-8">
 
+<head>
+  <meta charset="UTF-8">
+  <title>UV & Weer App</title>
+  <link rel="stylesheet" href="weer.css">
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
+
+  <style>
+    #vanta-bg {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    body {
+      position: relative;
+      z-index: 1;
+      font-family: sans-serif;
+    }
+
+    .box {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+  </style>
 </head>
+
 <body>
-     <div id="vanta-bg"></div>
-   
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
+  <div id="vanta-bg"></div>
 
   <h1 id="titel">🌤 UV & Weer App</h1>
   <input type="text" id="plaats" placeholder="Voer plaats in (bijv. Amsterdam)">
-  
   <select id="huidtype">
-    <option id="skincolour1" value="1">Huidtype 1 - Zeer licht</option>
-    <option id="skincolour2"value="2">Huidtype 2 - Licht</option>
-    <option id="skincolour3"value="3">Huidtype 3 - Licht getint</option>
-    <option id="skincolour4"value="4">Huidtype 4 - Getint</option>
-    <option id="skincolour5"value="5">Huidtype 5 - Donker</option>
-    <option id="skincolour6"value="6">Huidtype 6 - Zeer donker</option>
+    <option value="1">Huidtype 1 - Zeer licht</option>
+    <option value="2">Huidtype 2 - Licht</option>
+    <option value="3">Huidtype 3 - Licht getint</option>
+    <option value="4">Huidtype 4 - Getint</option>
+    <option value="5">Huidtype 5 - Donker</option>
+    <option value="6">Huidtype 6 - Zeer donker</option>
   </select>
-
   <button onclick="haalUVData()">Zoek UV & Weer</button>
 
   <div id="resultaat" class="box"></div>
@@ -46,7 +71,7 @@
       // OpenUV API
       const uvResp = await fetch(`https://api.openuv.io/api/v1/uv?lat=${lat}&lng=${lng}`, {
         headers: {
-          "x-access-token": "openuv-1rmfhrmceiowqi-io"
+          "x-access-token": "openuv-1rmfhrmcegy3ps-io"
         }
       });
       const uvData = await uvResp.json();
@@ -59,6 +84,8 @@
       const temperatuur = weerData.main.temp;
       const weerBeschrijving = weerData.weather[0].description;
       const icon = weerData.weather[0].icon;
+      const zonsopkomst = new Date(weerData.sys.sunrise * 1000).toLocaleTimeString('nl-NL');
+      const zonsondergang = new Date(weerData.sys.sunset * 1000).toLocaleTimeString('nl-NL');
 
       document.getElementById('resultaat').innerHTML = `
         <h3>📍 Locatie: ${plaats}</h3>
@@ -70,6 +97,9 @@
             <p>🌡️ <strong>Temperatuur:</strong> ${temperatuur}°C</p>
             <p>🌥️ <strong>Weer:</strong> ${weerBeschrijving}</p>
             <p>🔆 <strong>UV-index:</strong> ${uvIndex.toFixed(1)}</p>
+            <p>🍃 <strong>Wind:</strong> ${weerData.wind.speed} m/s, richting ${weerData.wind.deg}°</p>
+            <p>🌅 <strong>Zonsopkomst:</strong> ${zonsopkomst}</p>
+            <p>🌇 <strong>Zonsondergang:</strong> ${zonsondergang}</p>
           </div>
         </div>
       `;
@@ -88,29 +118,34 @@
         advies = "Blijf zoveel mogelijk uit de zon!";
       }
 
+      // SPF advies
+      let spf = "SPF 15";
+      if (uvIndex > 5) spf = "SPF 30";
+      if (uvIndex > 7 || huidtype <= 2) spf = "SPF 50+";
+      advies += `<br><strong>Aanbevolen zonnebrand:</strong> ${spf}`;
+
       document.getElementById('advies').innerHTML = `<strong>Advies:</strong> ${advies}`;
     }
   </script>
- 
+
   <script>
-VANTA.CLOUDS({
-  el: "#vanta-bg",
-  mouseControls: true,
-  touchControls: true,
-  gyroControls: false,
-  minHeight: 200.00,
-  minWidth: 200.00,
-  backgroundColor: 0xffffff,
-  skyColor: 0x68b8d7,
-  cloudColor: 0xadc1de,
-  cloudShadowColor: 0x183550,
-  sunColor: 0xff9919,
-  sunGlareColor: 0xff6633,
-  sunlightColor: 0xff9933,
-  speed: 1.00
-})
-</script>
-
-
+    VANTA.CLOUDS({
+      el: "#vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      backgroundColor: 0xffffff,
+      skyColor: 0x68b8d7,
+      cloudColor: 0xadc1de,
+      cloudShadowColor: 0x183550,
+      sunColor: 0xff9919,
+      sunGlareColor: 0xff6633,
+      sunlightColor: 0xff9933,
+      speed: 1.00
+    });
+  </script>
 </body>
+
 </html>
